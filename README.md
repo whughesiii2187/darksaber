@@ -1,11 +1,30 @@
 # darksaber &nbsp; [![bluebuild build badge](https://github.com/whughesiii2187/darksaber/actions/workflows/build.yml/badge.svg)](https://github.com/whughesiii2187/darksaber/actions/workflows/build.yml)
 
-A Fedora Atomic image built with [BlueBuild](https://blue-build.org), using the [Niri](https://github.com/YaLTeR/niri) scrolling compositor and [DankMaterialShell](https://danklinux.com) as the desktop. Inspired by [Zirconium](https://github.com/zirconium-dev/zirconium).
+A Fedora Atomic image for containerized development, built with [BlueBuild](https://blue-build.org), using the [Niri](https://github.com/YaLTeR/niri) scrolling compositor and [DankMaterialShell](https://danklinux.com) as the desktop. Inspired by [Zirconium](https://github.com/zirconium-dev/zirconium).
 
-- **Base:** `ghcr.io/ublue-os/base-main` (Fedora Atomic + codecs/firmware, no desktop environment)
+| Image | For |
+|---|---|
+| `ghcr.io/whughesiii2187/darksaber` | Intel and AMD graphics |
+| `ghcr.io/whughesiii2187/darksaber-nvidia` | NVIDIA GTX 16xx / RTX and newer (open kernel modules, GPU access in containers) |
+
+- **Base:** `ghcr.io/ublue-os/base-main` / `base-nvidia` (Fedora Atomic + codecs/firmware, no desktop environment)
 - **Desktop:** Niri, DankMaterialShell, `dms-greeter` on greetd, Ghostty, Nautilus
-- **Apps:** Firefox, LibreOffice, Bazaar, Flatseal, Gear Lever and a few GNOME utilities as Flatpaks; imv and mpv for images and video. Install anything else from Bazaar, Flatpak, Homebrew or a distrobox.
-- **Extras:** QEMU/KVM with virt-manager (admins are added to the `libvirt` group automatically), ufw as the firewall, Homebrew for the first user, zsh available as a login shell.
+- **Apps:** Firefox, LibreOffice, Bazaar, Flatseal, Gear Lever, Podman Desktop and a few GNOME utilities as Flatpaks; VS Code; imv and mpv for images and video.
+- **System:** ufw as the firewall, Homebrew for the first user, zsh available as a login shell.
+
+## Development workflow
+
+The host stays clean: compilers and language runtimes live in containers, CLI tools come from Homebrew, and GUI apps from Flatpak.
+
+- **Containers:** rootless Podman with `podman-compose`, `buildah`, `skopeo` and `podman-tui`. `docker` is Podman, and `DOCKER_HOST` points at the Podman socket, so devcontainers, VS Code Dev Containers, Testcontainers and `act` work without Docker.
+- **Dev boxes:** `ujust devbox` creates `fedora-dev` and `ubuntu-dev` distroboxes with build tools (defined in `/usr/share/darksaber/distrobox.ini`).
+- **System containers and VMs:** Incus (`ujust incus-init` once) and QEMU/KVM with virt-manager. Admins are added to the `incus-admin` and `libvirt` groups on boot.
+- **Kubernetes:** `ujust install-k8s-tools` installs kind, kubectl, helm and k9s with Homebrew.
+- **Git:** `git-lfs`, and HTTPS logins are stored in the keyring.
+- **Limits:** higher inotify and open-file limits for IDEs, language servers and file watchers.
+
+> [!NOTE]
+> Rootless containers (the default) are covered by ufw. **Rootful** Podman containers with published ports write their own firewall rules, so those ports can be reachable from your network even when ufw would block them. Rootful containers on a custom network also need a ufw rule for DNS on that network's bridge.
 
 ## Customizing Niri
 
@@ -38,6 +57,8 @@ To rebase an existing atomic Fedora installation to the latest build:
   ```
 
 The `latest` tag will automatically point to the latest build. That build will still always use the Fedora version specified in `recipe.yml`, so you won't get accidentally updated to the next major version.
+
+For NVIDIA GPUs, use `darksaber-nvidia` in place of `darksaber` in both rebase commands. If Secure Boot is on, enroll Universal Blue's signing key for the NVIDIA kernel modules after the first reboot with `ujust enroll-secure-boot-key`.
 
 ## ISO
 

@@ -5,9 +5,12 @@ After=ufw.service
 
 [Service]
 Type=oneshot
-# Let VMs on libvirt's default network get DHCP leases and DNS
+# Let VMs and containers on libvirt's and Incus's default networks get
+# DHCP leases and DNS
 ExecStart=ufw allow in on virbr0 to any port 67:68 proto udp
 ExecStart=ufw allow in on virbr0 to any port 53
+ExecStart=ufw allow in on incusbr0 to any port 67:68 proto udp
+ExecStart=ufw allow in on incusbr0 to any port 53
 ExecStart=ufw --force enable
 ExecStart=mkdir -p /var/lib/darksaber
 ExecStart=touch /var/lib/darksaber/ufw-configured

@@ -1,0 +1,11 @@
+[Unit]
+Description=Add wheel users to the libvirt and incus-admin groups
+After=systemd-sysusers.service
+Before=incus.socket incus.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/darksaber-groups
+
+[Install]
+WantedBy=multi-user.target

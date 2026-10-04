@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+# image will be published to ghcr.io/<user>/<name>
+name: darksaber-nvidia
+# description will be included in the image's metadata
+description: darksaber for NVIDIA GPUs (GTX 16xx / RTX and newer).
+
+# Universal Blue's NVIDIA base: the open NVIDIA kernel modules, drivers and
+# nvidia-container-toolkit (GPU access inside podman containers) are already in.
+base-image: ghcr.io/ublue-os/base-nvidia
+image-version: latest # base-nvidia only publishes `latest`
+
+modules:
+  - from-file: common.yml

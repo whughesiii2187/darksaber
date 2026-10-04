@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Give admins (wheel) passwordless access to system VMs (libvirt) and
+# Incus, and give root the subordinate ID range Incus needs for
+# unprivileged containers. On atomic systems this can't be done at image
+# build time, because users only exist on the installed machine, so it
+# runs on every boot. Everything here is idempotent.
+
+set -euo pipefail
+
+wheel_users=$(getent group wheel | cut -d: -f4 | tr ',' ' ')
+
+for group in libvirt incus-admin; do
+  getent group "$group" >/dev/null || continue
+  for user in $wheel_users; do
+    id -nG "$user" | grep -qw "$group" || usermod -aG "$group" "$user"
+  done
+done
+
+for file in /etc/subuid /etc/subgid; do
+  grep -qs '^root:' "$file" || echo 'root:1000000:1000000000' >>"$file"
+done

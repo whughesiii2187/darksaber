@@ -21,3 +21,14 @@ systemctl mask firewalld.service
 # Allow forwarded traffic so libvirt's NAT network works behind ufw
 sed -i 's/^DEFAULT_FORWARD_POLICY="DROP"/DEFAULT_FORWARD_POLICY="ACCEPT"/' /etc/default/ufw
 grep -q '^DEFAULT_FORWARD_POLICY="ACCEPT"' /etc/default/ufw
+
+# Register git-lfs filters system-wide (appends to /etc/gitconfig)
+git lfs install --system
+
+# Fail the build early if the dev tooling is missing
+command -v docker podman-compose buildah skopeo incus code
+test -f /usr/lib/systemd/user/podman.socket
+
+# darksaber's `ujust` commands live in 60-custom.just; make sure the base
+# image's ujust still imports it
+grep -qF '60-custom.just' /usr/share/ublue-os/justfile
