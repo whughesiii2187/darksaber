@@ -65,10 +65,12 @@ For NVIDIA GPUs, use `darksaber-nvidia` in place of `darksaber` in both rebase c
 You can generate an offline installer ISO with the [BlueBuild CLI](https://blue-build.org/how-to/generate-iso/#_top) on any machine with podman:
 
 ```bash
-sudo bluebuild generate-iso --variant server --iso-name darksaber.iso image ghcr.io/whughesiii2187/darksaber
+sudo bluebuild generate-iso --variant server --secure-boot-url '' --iso-name darksaber.iso image ghcr.io/whughesiii2187/darksaber
 ```
 
 Use `ghcr.io/whughesiii2187/darksaber-nvidia` for NVIDIA GPUs.
+
+`--secure-boot-url ''` stops the installer from queuing Universal Blue's Secure Boot key, so there's no blue MOK enrollment screen on first boot. If you use `darksaber-nvidia` with Secure Boot on, the NVIDIA kernel modules won't load until you enroll the key with `ujust enroll-secure-boot-key` (or turn Secure Boot off).
 
 > [!IMPORTANT]
 > **Always pass `--variant server`.** darksaber has no first-boot setup, so the user account must be created in the installer. The default `kinoite` variant and the `silverblue` variant both skip the account screens and expect KDE or GNOME to create the user on first boot, which leaves you with no account to log in with. The variant only changes the installer's screens and defaults; it doesn't add anything to the installed system.
