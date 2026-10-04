@@ -1,0 +1,11 @@
+[Unit]
+Description=Seed the darksaber Niri config for this user
+ConditionPathExists=!%h/.config/niri/config.kdl
+Before=niri.service
+
+[Service]
+Type=oneshot
+ExecStart=install -Dm0644 /usr/share/darksaber/niri/config.kdl %h/.config/niri/config.kdl
+
+[Install]
+WantedBy=niri.service

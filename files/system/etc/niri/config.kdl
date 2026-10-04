@@ -1,0 +1,2 @@
+// Fallback used by Niri only when ~/.config/niri/config.kdl doesn't exist.
+include "/usr/share/darksaber/niri/darksaber.kdl"

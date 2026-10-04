@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Admins (wheel) get passwordless access to system VMs in virt-manager.
+# On atomic systems `usermod` can't do this at image build time, because
+# users only exist on the installed machine, so it runs on every boot.
+
+set -euo pipefail
+
+getent group libvirt >/dev/null || exit 0
+
+for user in $(getent group wheel | cut -d: -f4 | tr ',' ' '); do
+  id -nG "$user" | grep -qw libvirt || usermod -aG libvirt "$user"
+done

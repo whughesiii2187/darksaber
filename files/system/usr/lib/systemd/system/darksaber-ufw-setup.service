@@ -1,0 +1,16 @@
+[Unit]
+Description=Apply darksaber's default ufw rules (first boot only)
+ConditionPathExists=!/var/lib/darksaber/ufw-configured
+After=ufw.service
+
+[Service]
+Type=oneshot
+# Let VMs on libvirt's default network get DHCP leases and DNS
+ExecStart=ufw allow in on virbr0 to any port 67:68 proto udp
+ExecStart=ufw allow in on virbr0 to any port 53
+ExecStart=ufw --force enable
+ExecStart=mkdir -p /var/lib/darksaber
+ExecStart=touch /var/lib/darksaber/ufw-configured
+
+[Install]
+WantedBy=multi-user.target

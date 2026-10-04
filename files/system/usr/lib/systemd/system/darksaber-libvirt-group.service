@@ -1,0 +1,10 @@
+[Unit]
+Description=Add wheel users to the libvirt group
+After=systemd-sysusers.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/darksaber-libvirt-group
+
+[Install]
+WantedBy=multi-user.target
