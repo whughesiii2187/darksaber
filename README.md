@@ -62,7 +62,21 @@ For NVIDIA GPUs, use `darksaber-nvidia` in place of `darksaber` in both rebase c
 
 ## ISO
 
-If build on Fedora Atomic, you can generate an offline ISO with the instructions available [here](https://blue-build.org/how-to/generate-iso/#_top). These ISOs cannot unfortunately be distributed on GitHub for free due to large sizes, so for public projects something else has to be used for hosting.
+You can generate an offline installer ISO with the [BlueBuild CLI](https://blue-build.org/how-to/generate-iso/#_top) on any machine with podman:
+
+```bash
+sudo bluebuild generate-iso --variant server --iso-name darksaber.iso image ghcr.io/whughesiii2187/darksaber
+```
+
+Use `ghcr.io/whughesiii2187/darksaber-nvidia` for NVIDIA GPUs.
+
+> [!IMPORTANT]
+> **Always pass `--variant server`.** darksaber has no first-boot setup, so the user account must be created in the installer. The default `kinoite` variant and the `silverblue` variant both skip the account screens and expect KDE or GNOME to create the user on first boot, which leaves you with no account to log in with. The variant only changes the installer's screens and defaults; it doesn't add anything to the installed system.
+
+> [!WARNING]
+> The `server` installer's **automatic** disk layout is XFS on LVM with `/` capped at 15 GiB, and containers, VMs and Flatpaks all live under `/`. In **Installation Destination**, choose **Custom**, set the scheme to **Btrfs**, and click **"Click here to create them automatically"** to get the normal desktop layout with all the space shared.
+
+These ISOs are too large to distribute on GitHub for free, so if you share the image publicly, host the ISO somewhere else.
 
 ## Verification
 
