@@ -5,6 +5,10 @@
 #   sudo ./iso/build-iso.sh darksaber-nvidia   # NVIDIA variant
 #
 # The ISO and its checksum are written to ./output (or $OUTPUT_DIR).
+#
+# bootc-image-builder needs podman. Without podman, the script uses Docker
+# to run itself inside a podman container. Set CONTAINER_ENGINE=docker or
+# CONTAINER_ENGINE=podman to choose explicitly.
 set -euo pipefail
 
 image_name=${1:-darksaber}
@@ -17,6 +21,36 @@ if [[ ! -f $config ]]; then
   echo "No installer config for $image_name: $config" >&2
   exit 1
 fi
+
+engine=${CONTAINER_ENGINE:-}
+if [[ -z $engine ]]; then
+  if command -v podman >/dev/null; then
+    engine=podman
+  elif command -v docker >/dev/null; then
+    engine=docker
+  else
+    echo "Install podman or Docker to build the ISO." >&2
+    exit 1
+  fi
+fi
+
+case $engine in
+  podman) ;;
+  docker)
+    mkdir -p "$output"
+    exec docker run --rm --privileged \
+      -v "$iso_dir:/iso:ro" \
+      -v "$output:/output" \
+      -e OUTPUT_DIR=/output \
+      -e CONTAINER_ENGINE=podman \
+      quay.io/podman/stable /iso/build-iso.sh "$image_name"
+    ;;
+  *)
+    echo "Unsupported CONTAINER_ENGINE: $engine (use podman or docker)" >&2
+    exit 1
+    ;;
+esac
+
 if [[ $EUID -ne 0 ]]; then
   echo "Run with sudo: bootc-image-builder needs rootful podman." >&2
   exit 1

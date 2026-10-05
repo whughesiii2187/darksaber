@@ -62,20 +62,14 @@ For NVIDIA GPUs, use `darksaber-nvidia` in place of `darksaber` in both rebase c
 
 ## ISO
 
-You can generate an offline installer ISO with [bootc-image-builder](https://github.com/osbuild/bootc-image-builder) on any machine with podman:
+You can generate an offline installer ISO with [bootc-image-builder](https://github.com/osbuild/bootc-image-builder) on any machine with podman or Docker:
 
 ```bash
 sudo ./iso/build-iso.sh                    # writes output/darksaber.iso
 sudo ./iso/build-iso.sh darksaber-nvidia   # writes output/darksaber-nvidia.iso
 ```
 
-On a machine with Docker instead of podman, run the script inside a podman container:
-
-```bash
-docker run --rm --privileged -v "$PWD:/darksaber" -w /darksaber -e OUTPUT_DIR=/darksaber/output quay.io/podman/stable ./iso/build-iso.sh
-```
-
-Add `darksaber-nvidia` to the end for the NVIDIA ISO.
+bootc-image-builder needs rootful podman. If podman isn't installed, the script uses Docker to run itself inside a podman container, so you don't need `sudo` if your user is in the `docker` group. To pick one when both are installed, set `CONTAINER_ENGINE=podman` or `CONTAINER_ENGINE=docker`.
 
 The installer's settings are in `iso/<image>.toml`. You create your user account in the installer, and the automatic disk layout is Btrfs using the whole disk. After installing, the system updates from the signed image on `ghcr.io`.
 
