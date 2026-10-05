@@ -69,6 +69,14 @@ sudo ./iso/build-iso.sh                    # writes output/darksaber.iso
 sudo ./iso/build-iso.sh darksaber-nvidia   # writes output/darksaber-nvidia.iso
 ```
 
+On a machine with Docker instead of podman, run the script inside a podman container:
+
+```bash
+docker run --rm --privileged -v "$PWD:/darksaber" -w /darksaber -e OUTPUT_DIR=/darksaber/output quay.io/podman/stable ./iso/build-iso.sh
+```
+
+Add `darksaber-nvidia` to the end for the NVIDIA ISO.
+
 The installer's settings are in `iso/<image>.toml`. You create your user account in the installer, and the automatic disk layout is Btrfs using the whole disk. After installing, the system updates from the signed image on `ghcr.io`.
 
 The ISO doesn't enroll a Secure Boot key, so there's no MOK enrollment screen on first boot. If you use `darksaber-nvidia` with Secure Boot on, the NVIDIA kernel modules won't load until you enroll Universal Blue's key with `ujust enroll-secure-boot-key` (or turn Secure Boot off).
