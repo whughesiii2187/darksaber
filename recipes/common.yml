@@ -73,6 +73,7 @@ modules:
         - NetworkManager-openvpn
         - NetworkManager-openconnect
         - wireguard-tools
+        - tor # daemon only, not enabled; `systemctl enable --now tor` to use it
         - bluez
         - bluez-tools
         - pipewire
