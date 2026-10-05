@@ -130,7 +130,6 @@ modules:
 
         # --- CLI essentials ---
         - zsh
-        - util-linux # full util-linux; the base only has util-linux-core, which lacks chsh
         - just
         - fastfetch
         - btop

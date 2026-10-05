@@ -33,5 +33,7 @@ test -f /usr/lib/systemd/user/podman.socket
 # image's ujust still imports it
 grep -qF '60-custom.just' /usr/share/ublue-os/justfile
 
-# chsh comes from the full util-linux, not util-linux-core
+# The base image deletes /usr/bin/chsh even though util-linux is installed;
+# reinstall the package to put it back
+dnf -y reinstall util-linux
 command -v chsh
