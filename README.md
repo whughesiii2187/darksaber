@@ -62,21 +62,16 @@ For NVIDIA GPUs, use `darksaber-nvidia` in place of `darksaber` in both rebase c
 
 ## ISO
 
-You can generate an offline installer ISO with the [BlueBuild CLI](https://blue-build.org/how-to/generate-iso/#_top) on any machine with podman:
+You can generate an offline installer ISO with [bootc-image-builder](https://github.com/osbuild/bootc-image-builder) on any machine with podman:
 
 ```bash
-sudo bluebuild generate-iso --variant server --secure-boot-url '' --iso-name darksaber.iso image ghcr.io/whughesiii2187/darksaber
+sudo ./iso/build-iso.sh                    # writes output/darksaber.iso
+sudo ./iso/build-iso.sh darksaber-nvidia   # writes output/darksaber-nvidia.iso
 ```
 
-Use `ghcr.io/whughesiii2187/darksaber-nvidia` for NVIDIA GPUs.
+The installer's settings are in `iso/<image>.toml`. You create your user account in the installer, and the automatic disk layout is Btrfs using the whole disk. After installing, the system updates from the signed image on `ghcr.io`.
 
-`--secure-boot-url ''` stops the installer from queuing Universal Blue's Secure Boot key, so there's no blue MOK enrollment screen on first boot. If you use `darksaber-nvidia` with Secure Boot on, the NVIDIA kernel modules won't load until you enroll the key with `ujust enroll-secure-boot-key` (or turn Secure Boot off).
-
-> [!IMPORTANT]
-> **Always pass `--variant server`.** darksaber has no first-boot setup, so the user account must be created in the installer. The default `kinoite` variant and the `silverblue` variant both skip the account screens and expect KDE or GNOME to create the user on first boot, which leaves you with no account to log in with. The variant only changes the installer's screens and defaults; it doesn't add anything to the installed system.
-
-> [!WARNING]
-> The `server` installer's **automatic** disk layout is XFS on LVM with `/` capped at 15 GiB, and containers, VMs and Flatpaks all live under `/`. In **Installation Destination**, choose **Custom**, set the scheme to **Btrfs**, and click **"Click here to create them automatically"** to get the normal desktop layout with all the space shared.
+The ISO doesn't enroll a Secure Boot key, so there's no MOK enrollment screen on first boot. If you use `darksaber-nvidia` with Secure Boot on, the NVIDIA kernel modules won't load until you enroll Universal Blue's key with `ujust enroll-secure-boot-key` (or turn Secure Boot off).
 
 These ISOs are too large to distribute on GitHub for free, so if you share the image publicly, host the ISO somewhere else.
 
