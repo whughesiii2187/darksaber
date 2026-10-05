@@ -32,3 +32,6 @@ test -f /usr/lib/systemd/user/podman.socket
 # darksaber's `ujust` commands live in 60-custom.just; make sure the base
 # image's ujust still imports it
 grep -qF '60-custom.just' /usr/share/ublue-os/justfile
+
+# chsh comes from the full util-linux, not util-linux-core
+command -v chsh
