@@ -34,31 +34,40 @@ Put your own tweaks in `~/.config/niri/local.kdl` (per user) or `/etc/niri/local
 
 ## Installation
 
-> [!WARNING]  
-> [This is an experimental feature](https://www.fedoraproject.org/wiki/Changes/OstreeNativeContainerStable), try at your own discretion.
+Pick the image for your GPU:
 
-To rebase an existing atomic Fedora installation to the latest build:
+- Intel / AMD: `ghcr.io/whughesiii2187/darksaber`
+- NVIDIA: `ghcr.io/whughesiii2187/darksaber-nvidia`
 
-- First rebase to the unsigned image, to get the proper signing keys and policies installed:
-  ```
-  rpm-ostree rebase ostree-unverified-registry:ghcr.io/whughesiii2187/darksaber:latest
-  ```
-- Reboot to complete the rebase:
-  ```
-  systemctl reboot
-  ```
-- Then rebase to the signed image, like so:
-  ```
-  rpm-ostree rebase ostree-image-signed:docker://ghcr.io/whughesiii2187/darksaber:latest
-  ```
-- Reboot again to complete the installation
-  ```
-  systemctl reboot
-  ```
+### Fresh install
 
-The `latest` tag will automatically point to the latest build. That build will still always use the Fedora version specified in `recipe.yml`, so you won't get accidentally updated to the next major version.
+Build an installer ISO (see [ISO](#iso) below) and install from it. The image's signing key comes with it, so there's nothing else to set up.
 
-For NVIDIA GPUs, use `darksaber-nvidia` in place of `darksaber` in both rebase commands. If Secure Boot is on, enroll Universal Blue's signing key for the NVIDIA kernel modules after the first reboot with `ujust enroll-secure-boot-key`.
+### Switching from another Fedora Atomic system (one time)
+
+Only needed when moving an existing Silverblue, Kinoite, Bluefin, etc. install onto darksaber:
+
+```bash
+sudo bootc switch ghcr.io/whughesiii2187/darksaber:latest
+systemctl reboot
+# darksaber's signing key and policy are now installed; start enforcing them:
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/whughesiii2187/darksaber:latest
+systemctl reboot
+```
+
+For NVIDIA, use `darksaber-nvidia` in both commands. If Secure Boot is on, enroll Universal Blue's key for the NVIDIA kernel modules after the first reboot with `ujust enroll-secure-boot-key`.
+
+### Updating
+
+Once you're on darksaber, none of the steps above are needed again. Updates download in the background and apply on the next reboot. To update by hand:
+
+```bash
+sudo bootc upgrade   # then reboot
+sudo bootc status    # which image you're on and whether its signature is enforced
+sudo bootc rollback  # boot the previous image if an update causes problems
+```
+
+`latest` follows the base image's latest Fedora release, so new Fedora versions arrive as normal updates. To stay on a release, pin `image-version` in `recipes/recipe.yml` (for example `44`).
 
 ## ISO
 
