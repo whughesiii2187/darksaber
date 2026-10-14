@@ -82,6 +82,7 @@ modules:
         - tuned
         - tuned-ppd # power profiles for the DMS battery menu
         - upower
+        - powertop # power usage diagnostics
         - fprintd
         - fprintd-pam
         - iio-sensor-proxy # auto-rotation / ambient light

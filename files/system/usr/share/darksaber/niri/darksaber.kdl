@@ -471,7 +471,7 @@ binds {
     Alt+Print hotkey-overlay-title="Screenshot: Window" { spawn "dms" "screenshot" "window"; }
     // === Display Profiles ===
     Mod+P hotkey-overlay-title="Cycle Display Profile" {
-        spawn "dms" "ipc" "outputs" "cycleProfile";
+        spawn "dms" "ipc" "call" "outputs" "cycleProfile";
     }
 
     // === System Controls ===

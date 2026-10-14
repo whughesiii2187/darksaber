@@ -8,6 +8,9 @@ systemctl set-default graphical.target
 # Unlock gnome-keyring with the login password
 sed -i -e '/pam_gnome_keyring.so/ s/^-auth/auth/' \
        -e '/pam_gnome_keyring.so/ s/^-session/session/' /etc/pam.d/greetd
+# Fail the build if the PAM file changed and the sed above didn't apply
+grep -qE '^auth\s+.*pam_gnome_keyring\.so' /etc/pam.d/greetd
+grep -qE '^session\s+.*pam_gnome_keyring\.so' /etc/pam.d/greetd
 
 # Fail the build early if the core pieces are missing
 niri --version

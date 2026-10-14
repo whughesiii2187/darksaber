@@ -80,7 +80,7 @@ sudo ./iso/build-iso.sh darksaber-nvidia   # writes output/darksaber-nvidia.iso
 
 bootc-image-builder needs rootful podman. If podman isn't installed, the script uses Docker to run itself inside a podman container, so you don't need `sudo` if your user is in the `docker` group. To pick one when both are installed, set `CONTAINER_ENGINE=podman` or `CONTAINER_ENGINE=docker`.
 
-The installer's settings are in `iso/<image>.toml`. You create your user account in the installer, and the automatic disk layout is Btrfs using the whole disk. After installing, the system updates from the signed image on `ghcr.io`.
+The installer's settings are in `iso/<image>.toml`. You create your user account in the installer. On a machine with one internal disk, the installer erases it and sets up encrypted (LUKS2) Btrfs on the whole disk, asking you for the encryption passphrase. USB drives, including the installer stick, are never touched. With two or more internal disks, pick the target on the installer's disk screen and tick "Encrypt my data". After installing, the system updates from the signed image on `ghcr.io`.
 
 The ISO doesn't enroll a Secure Boot key, so there's no MOK enrollment screen on first boot. If you use `darksaber-nvidia` with Secure Boot on, the NVIDIA kernel modules won't load until you enroll Universal Blue's key with `ujust enroll-secure-boot-key` (or turn Secure Boot off).
 

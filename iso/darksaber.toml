@@ -1,9 +1,31 @@
 [customizations.installer.kickstart]
-contents = """
+# Literal string ('''): the shell below must reach the installer unescaped.
+contents = '''
+%pre --erroronfail
+# Encrypted Btrfs on the whole disk, but only when there's exactly one
+# internal disk, so the choice is unambiguous. USB drives (including the
+# installer stick) are never candidates. With two or more internal disks,
+# nothing is written and the installer's disk screen picks the target
+# (tick "Encrypt my data" there).
+candidates=$(lsblk -dnpo NAME,TYPE,RM,TRAN | awk '$2 == "disk" && $3 == 0 && $4 != "usb" && $1 !~ /zram/ {print $1}')
+: >/tmp/darksaber-storage.ks
+if [ "$(printf '%s\n' "$candidates" | grep -c .)" -eq 1 ]; then
+  disk=${candidates#/dev/}
+  cat >/tmp/darksaber-storage.ks <<EOF
+ignoredisk --only-use=$disk
+zerombr
+clearpart --all --initlabel --drives=$disk
+autopart --type=btrfs --encrypted --luks-version=luks2
+EOF
+fi
+%end
+
+%include /tmp/darksaber-storage.ks
+
 %post
 bootc switch --mutate-in-place --enforce-container-sigpolicy --transport registry ghcr.io/whughesiii2187/darksaber:latest
 %end
-"""
+'''
 
 [customizations.installer.modules]
 enable = [

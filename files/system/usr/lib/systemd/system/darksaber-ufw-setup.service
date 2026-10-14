@@ -1,6 +1,8 @@
 [Unit]
-Description=Apply darksaber's default ufw rules (first boot only)
-ConditionPathExists=!/var/lib/darksaber/ufw-configured
+Description=Apply darksaber's default ufw rules (once per rule set)
+# Bump the marker's version when rules are added, so existing installs pick
+# them up; ufw skips rules that already exist, so rerunning is harmless
+ConditionPathExists=!/var/lib/darksaber/ufw-configured-v2
 After=ufw.service
 
 [Service]
@@ -11,9 +13,14 @@ ExecStart=ufw allow in on virbr0 to any port 67:68 proto udp
 ExecStart=ufw allow in on virbr0 to any port 53
 ExecStart=ufw allow in on incusbr0 to any port 67:68 proto udp
 ExecStart=ufw allow in on incusbr0 to any port 53
+# mDNS, so network printers and other services are discovered
+ExecStart=ufw allow in proto udp to 224.0.0.251 port 5353 comment mDNS
+ExecStart=ufw allow in proto udp to ff02::fb port 5353 comment mDNS
+# LocalSend receives files on this port (TCP and UDP)
+ExecStart=ufw allow 53317 comment LocalSend
 ExecStart=ufw --force enable
 ExecStart=mkdir -p /var/lib/darksaber
-ExecStart=touch /var/lib/darksaber/ufw-configured
+ExecStart=touch /var/lib/darksaber/ufw-configured-v2
 
 [Install]
 WantedBy=multi-user.target
