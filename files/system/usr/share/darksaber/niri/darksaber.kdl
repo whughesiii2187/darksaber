@@ -1,5 +1,5 @@
 // darksaber system-wide Niri defaults.
-// Based on DankMaterialShell's default Niri config.
+// Based on Dux Shell's (formerly DankMaterialShell) default Niri config.
 //
 // This file lives in /usr and is replaced on every image update.
 // Don't edit it — put overrides in ~/.config/niri/local.kdl (per user)
@@ -229,6 +229,11 @@ window-rule {
     match app-id="kitty"
     draw-border-with-background false
 }
+// Float Dux Files' portal open/save dialogs
+window-rule {
+    match app-id=r#"^dev\.duxlabs\.files$"# title=r#"^(Open|Save|Select|Upload|Export|Import)"#
+    open-floating true
+}
 window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
     match app-id="zoom"
@@ -257,6 +262,7 @@ binds {
 
     // === Application Launchers ===
     Mod+T hotkey-overlay-title="Open Terminal" { spawn "ghostty"; }
+    Mod+E hotkey-overlay-title="File Manager" { spawn "dfiles"; }
     Mod+Space hotkey-overlay-title="Application Launcher" {
         spawn "dms" "ipc" "call" "spotlight" "toggle";
     }

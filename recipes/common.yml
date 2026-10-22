@@ -55,7 +55,11 @@ modules:
 
         # --- Core apps ---
         - ghostty
-        - nautilus
+        - dux-files # Dux Files file manager (dfiles); also the portal file chooser
+        - bubblewrap # sandboxes Dux Files' external thumbnailers
+        - ffmpegthumbnailer # video thumbnails
+        - poppler-utils # PDF thumbnails (pdftoppm)
+        - nautilus # kept as a fallback while Dux Files is new
         - nautilus-python
         - file-roller
         - gnome-disk-utility
@@ -172,6 +176,7 @@ modules:
       enabled:
         - dms.service
         - dsearch.service
+        - dfiles.service # keeps Dux Files warm so file dialogs open instantly
         - darksaber-niri-config.service
         - podman.socket # Docker-compatible API for devcontainers, VS Code, Testcontainers
 

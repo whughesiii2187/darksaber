@@ -3,7 +3,7 @@
 # image will be published to ghcr.io/<user>/<name>
 name: darksaber
 # description will be included in the image's metadata
-description: Fedora Atomic with Niri and DankMaterialShell, built for containerized development.
+description: Fedora Atomic with Niri and Dux Shell, built for containerized development.
 
 # Universal Blue's desktop-less Fedora Atomic image: codecs, firmware and
 # hardware support are already in, with no GNOME/KDE to fight with.

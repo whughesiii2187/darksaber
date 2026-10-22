@@ -1,6 +1,6 @@
 # darksaber &nbsp; [![bluebuild build badge](https://github.com/whughesiii2187/darksaber/actions/workflows/build.yml/badge.svg)](https://github.com/whughesiii2187/darksaber/actions/workflows/build.yml)
 
-A Fedora Atomic image for containerized development, built with [BlueBuild](https://blue-build.org), using the [Niri](https://github.com/YaLTeR/niri) scrolling compositor and [DankMaterialShell](https://danklinux.com) as the desktop. Inspired by [Zirconium](https://github.com/zirconium-dev/zirconium).
+A Fedora Atomic image for containerized development, built with [BlueBuild](https://blue-build.org), using the [Niri](https://github.com/YaLTeR/niri) scrolling compositor and [Dux Shell](https://duxlabs.dev) (formerly DankMaterialShell) as the desktop. Inspired by [Zirconium](https://github.com/zirconium-dev/zirconium).
 
 | Image | For |
 |---|---|
@@ -8,7 +8,7 @@ A Fedora Atomic image for containerized development, built with [BlueBuild](http
 | `ghcr.io/whughesiii2187/darksaber-nvidia` | NVIDIA GTX 16xx / RTX and newer (open kernel modules, GPU access in containers) |
 
 - **Base:** `ghcr.io/ublue-os/base-main` / `base-nvidia` (Fedora Atomic + codecs/firmware, no desktop environment)
-- **Desktop:** Niri, DankMaterialShell, `dms-greeter` on greetd, Ghostty, Nautilus
+- **Desktop:** Niri, Dux Shell, `dms-greeter` on greetd, Ghostty, [Dux Files](https://duxlabs.dev/docs/dfiles) (Nautilus is kept as a fallback)
 - **Apps:** Firefox, LibreOffice, Bazaar, Flatseal, Gear Lever, Podman Desktop and a few GNOME utilities as Flatpaks; VS Code; imv and mpv for images and video.
 - **System:** ufw as the firewall, Homebrew for the first user, zsh available as a login shell.
 
@@ -28,7 +28,7 @@ The host stays clean: compilers and language runtimes live in containers, CLI to
 
 ## Customizing Niri
 
-On first login, `~/.config/niri/config.kdl` is created. It includes the system defaults from `/usr/share/darksaber/niri/darksaber.kdl` (updated with the image), DMS's generated `dms/*.kdl` files, and then `local.kdl`.
+On first login, `~/.config/niri/config.kdl` is created. It includes the system defaults from `/usr/share/darksaber/niri/darksaber.kdl` (updated with the image), Dux Shell's generated `dms/*.kdl` files, and then `local.kdl`.
 
 Put your own tweaks in `~/.config/niri/local.kdl` (per user) or `/etc/niri/local.kdl` (system-wide). Because they're included last, later binds override the defaults.
 

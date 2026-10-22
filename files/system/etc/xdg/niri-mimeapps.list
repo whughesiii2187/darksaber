@@ -1,0 +1,5 @@
+# System-wide default apps for niri sessions (XDG_CURRENT_DESKTOP=niri).
+# Users override these in ~/.config/mimeapps.list.
+
+[Default Applications]
+inode/directory=dev.duxlabs.files.desktop

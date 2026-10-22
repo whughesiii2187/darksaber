@@ -17,6 +17,10 @@ niri --version
 command -v dms dms-greeter quickshell xwayland-satellite ghostty
 test -f /usr/lib/systemd/user/dms.service
 test -f /usr/lib/systemd/user/dsearch.service
+command -v dfiles
+test -f /usr/lib/systemd/user/dfiles.service
+test -f /usr/share/xdg-desktop-portal/portals/dfiles.portal
+test -f /usr/share/applications/dev.duxlabs.files.desktop
 
 # ufw replaces firewalld; don't let both manage the firewall
 systemctl mask firewalld.service
