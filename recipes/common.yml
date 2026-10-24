@@ -170,7 +170,8 @@ modules:
         - virtsecretd.socket
         - virtinterfaced.socket
         - virtproxyd.socket
-      disabled:
+        # Makes network-online.target mean the network is up, so the
+        # first-boot Flatpak install doesn't run before Wi-Fi connects
         - NetworkManager-wait-online.service
     user:
       enabled:

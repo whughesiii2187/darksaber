@@ -29,6 +29,13 @@ systemctl mask firewalld.service
 sed -i 's/^DEFAULT_FORWARD_POLICY="DROP"/DEFAULT_FORWARD_POLICY="ACCEPT"/' /etc/default/ufw
 grep -q '^DEFAULT_FORWARD_POLICY="ACCEPT"' /etc/default/ufw
 
+# ufw keeps its rules in /var/lib/ufw, which an installed system doesn't get
+# from the image; save the defaults for tmpfiles.d/darksaber-var.conf to copy
+mkdir -p /usr/share/darksaber
+cp -a /var/lib/ufw /usr/share/darksaber/ufw
+test -f /usr/share/darksaber/ufw/user.rules
+test -f /usr/share/darksaber/ufw/user6.rules
+
 # Register git-lfs filters system-wide (appends to /etc/gitconfig)
 git lfs install --system
 

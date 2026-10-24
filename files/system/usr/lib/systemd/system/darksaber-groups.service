@@ -1,7 +1,9 @@
 [Unit]
 Description=Add wheel users to the libvirt and incus-admin groups
 After=systemd-sysusers.service
-Before=incus.socket incus.service
+# Not incus.socket: sockets start before basic.target, which this service
+# follows, so ordering before it is a cycle and systemd drops the socket
+Before=incus.service
 
 [Service]
 Type=oneshot
