@@ -133,6 +133,9 @@ modules:
         - git-core
         - git-lfs
         - git-credential-libsecret # store HTTPS git logins in the keyring
+        - gcc # nvim-treesitter compiles its parsers with the system cc
+        - nodejs # runs the devcontainer CLI (files/scripts/cli-tools.sh)
+        - nodejs-npm
 
         # --- CLI essentials ---
         - zsh
@@ -142,6 +145,12 @@ modules:
         - inxi
         - jq
         - fzf
+        - stow # dotfiles
+        - tmux
+        - neovim
+        - ripgrep
+        - bat
+        - tree-sitter-cli
         - wev
         - wget2-wget
         - unzip
@@ -187,6 +196,7 @@ modules:
 
   - type: script
     scripts:
+      - cli-tools.sh
       - finalize.sh
 
   - type: default-flatpaks
@@ -204,6 +214,19 @@ modules:
           - org.libreoffice.LibreOffice
           - it.mijorus.gearlever # AppImage manager
           - io.podman_desktop.PodmanDesktop # GUI for containers, pods and images
+          - app.zen_browser.zen
+          - org.torproject.torbrowser-launcher
+          - com.bitwarden.desktop
+          - me.proton.Pass
+          - com.protonvpn.www
+          - org.gnome.seahorse.Application # manage gnome-keyring passwords and keys
+          - org.localsend.localsend_app
+          - us.zoom.Zoom
+          - com.ktechpit.whatsie # WhatsApp
+          - com.spotify.Client
+          - org.videolan.VLC
+          - org.qbittorrent.qBittorrent
+          - com.github.PintaProject.Pinta # image editor
       - scope: user # Also add Flathub user repo, but no user packages
         notify: false
 

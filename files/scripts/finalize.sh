@@ -51,3 +51,11 @@ grep -qF '60-custom.just' /usr/share/ublue-os/justfile
 # reinstall the package to put it back
 dnf -y reinstall util-linux
 command -v chsh
+
+# New users (including the one made in the installer) log in to zsh
+sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd
+grep -qx 'SHELL=/usr/bin/zsh' /etc/default/useradd
+grep -qx '/usr/bin/zsh' /etc/shells
+
+# Fail the build early if the CLI tools are missing
+command -v stow tmux nvim rg bat tree-sitter gcc fzf

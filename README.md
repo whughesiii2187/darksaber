@@ -9,17 +9,17 @@ A Fedora Atomic image for containerized development, built with [BlueBuild](http
 
 - **Base:** `ghcr.io/ublue-os/base-main` / `base-nvidia` (Fedora Atomic + codecs/firmware, no desktop environment)
 - **Desktop:** Niri, Dux Shell, `dms-greeter` on greetd, Ghostty, [Dux Files](https://duxlabs.dev/docs/dfiles) (Nautilus is kept as a fallback)
-- **Apps:** Firefox, LibreOffice, Bazaar, Flatseal, Gear Lever, Podman Desktop and a few GNOME utilities as Flatpaks; VS Code; imv and mpv for images and video.
-- **System:** ufw as the firewall, Homebrew for the first user, zsh available as a login shell.
+- **Apps:** Firefox, Zen, Tor Browser, LibreOffice, Papers, Bitwarden, Proton Pass, ProtonVPN, LocalSend, Zoom, Whatsie, Spotify, VLC, qBittorrent, Pinta, Bazaar, Flatseal, Gear Lever, Podman Desktop and a few GNOME utilities as Flatpaks (installed on first boot); VS Code; imv and mpv for images and video.
+- **CLI:** zsh (the default login shell), Neovim (with gcc and tree-sitter-cli for its parsers), tmux, stow, lazygit, fzf, ripgrep, bat, Clipboard (`cb`), Claude Code, the devcontainer CLI and the 0xProto Nerd Font.
+- **System:** ufw as the firewall, Homebrew for the first user.
 
 ## Development workflow
 
-The host stays clean: compilers and language runtimes live in containers, CLI tools come from Homebrew, and GUI apps from Flatpak.
+The host stays clean: language runtimes live in containers, and GUI apps come from Flatpak. The CLI tools above are in the image; Homebrew is there for anything else.
 
 - **Containers:** rootless Podman with `podman-compose`, `buildah`, `skopeo` and `podman-tui`. `docker` is Podman, and `DOCKER_HOST` points at the Podman socket, so devcontainers, VS Code Dev Containers, Testcontainers and `act` work without Docker.
 - **Dev boxes:** `ujust devbox` creates `fedora-dev` and `ubuntu-dev` distroboxes with build tools (defined in `/usr/share/darksaber/distrobox.ini`).
 - **System containers and VMs:** Incus (`ujust incus-init` once) and QEMU/KVM with virt-manager. Admins are added to the `incus-admin` and `libvirt` groups on boot.
-- **Kubernetes:** `ujust install-k8s-tools` installs kind, kubectl, helm and k9s with Homebrew.
 - **Git:** `git-lfs`, and HTTPS logins are stored in the keyring.
 - **Limits:** higher inotify and open-file limits for IDEs, language servers and file watchers.
 
