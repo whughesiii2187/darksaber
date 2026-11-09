@@ -46,7 +46,7 @@ npm install -g --prefix /usr @anthropic-ai/claude-code @devcontainers/cli
 
 # Fail the build early if any of them is missing
 lazygit --version
-cb --version
+cb help >/dev/null # cb has no --version
 claude --version
 devcontainer --version
 fc-list | grep -q '0xProto Nerd Font'
