@@ -5,12 +5,15 @@ set -oue pipefail
 # Boot into the graphical target so greetd starts
 systemctl set-default graphical.target
 
-# Unlock gnome-keyring with the login password
+# Unlock gnome-keyring with the login password. Newer greetd packages ship
+# the PAM file in /usr/lib/pam.d instead of /etc/pam.d
+greetd_pam=/etc/pam.d/greetd
+[ -f "$greetd_pam" ] || greetd_pam=/usr/lib/pam.d/greetd
 sed -i -e '/pam_gnome_keyring.so/ s/^-auth/auth/' \
-       -e '/pam_gnome_keyring.so/ s/^-session/session/' /etc/pam.d/greetd
+       -e '/pam_gnome_keyring.so/ s/^-session/session/' "$greetd_pam"
 # Fail the build if the PAM file changed and the sed above didn't apply
-grep -qE '^auth\s+.*pam_gnome_keyring\.so' /etc/pam.d/greetd
-grep -qE '^session\s+.*pam_gnome_keyring\.so' /etc/pam.d/greetd
+grep -qE '^auth\s+.*pam_gnome_keyring\.so' "$greetd_pam"
+grep -qE '^session\s+.*pam_gnome_keyring\.so' "$greetd_pam"
 
 # Fail the build early if the core pieces are missing
 niri --version
