@@ -49,4 +49,4 @@ lazygit --version
 cb help >/dev/null # cb has no --version
 claude --version
 devcontainer --version
-fc-list | grep -q '0xProto Nerd Font'
+test -n "$(fc-list '0xProto Nerd Font')"
