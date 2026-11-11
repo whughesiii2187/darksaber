@@ -60,9 +60,16 @@ fi
 podman pull "$image"
 
 # The installer is built from the image's own repos, so it needs their keys.
+# Fedora 45+ keeps them in /usr/share/pki/rpm-gpg; older releases and
+# third-party packages use /etc/pki/rpm-gpg. Copy whichever exist.
 rpm_gpg=$(mktemp -d)
 trap 'rm -rf "$rpm_gpg"' EXIT
-podman run --rm -v "$rpm_gpg:/out:Z" "$image" bash -c 'cp /etc/pki/rpm-gpg/* /out'
+mkdir -p "$rpm_gpg/etc" "$rpm_gpg/usr"
+podman run --rm -v "$rpm_gpg:/out:Z" "$image" bash -c '
+  shopt -s nullglob
+  for k in /etc/pki/rpm-gpg/*; do [[ -e $k ]] && cp -L "$k" /out/etc/; done
+  for k in /usr/share/pki/rpm-gpg/*; do [[ -e $k ]] && cp -L "$k" /out/usr/; done
+  [[ -n $(ls -A /out/etc /out/usr) ]] || { echo "No RPM GPG keys in image" >&2; exit 1; }'
 
 mkdir -p "$output"
 podman run --rm --privileged --pull=newer \
@@ -70,7 +77,8 @@ podman run --rm --privileged --pull=newer \
   -v "$config:/config.toml:ro" \
   -v "$output:/output" \
   -v /var/lib/containers/storage:/var/lib/containers/storage \
-  -v "$rpm_gpg:/etc/pki/rpm-gpg:ro" \
+  -v "$rpm_gpg/etc:/etc/pki/rpm-gpg:ro" \
+  -v "$rpm_gpg/usr:/usr/share/pki/rpm-gpg:ro" \
   quay.io/centos-bootc/bootc-image-builder:latest \
   --type iso --rootfs btrfs --use-librepo=True \
   "$image"

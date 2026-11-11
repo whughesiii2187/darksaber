@@ -60,5 +60,14 @@ sed -i 's|^SHELL=.*|SHELL=/usr/bin/zsh|' /etc/default/useradd
 grep -qx 'SHELL=/usr/bin/zsh' /etc/default/useradd
 grep -qx '/usr/bin/zsh' /etc/shells
 
+# Fedora 45+ ships its repo files in /usr/share/dnf5/repos.d, but
+# bootc-image-builder only reads /etc/yum.repos.d when building the ISO.
+# Copy them over; dnf5 treats a same-named file in /etc as an override, so
+# this changes nothing for dnf itself
+for repo in /usr/share/dnf5/repos.d/*.repo; do
+  [ -e "/etc/yum.repos.d/${repo##*/}" ] || cp "$repo" /etc/yum.repos.d/
+done
+test -f /etc/yum.repos.d/fedora.repo
+
 # Fail the build early if the CLI tools are missing
 command -v stow tmux nvim rg bat tree-sitter gcc fzf
