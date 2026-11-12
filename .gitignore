@@ -4,4 +4,5 @@ cosign.private
 *.iso
 *.iso-CHECKSUM
 /output/
+/iso/output/
 /.bluebuild-scripts_*

@@ -63,8 +63,10 @@ grep -qx '/usr/bin/zsh' /etc/shells
 # Fedora 45+ ships its repo files in /usr/share/dnf5/repos.d, but
 # bootc-image-builder only reads /etc/yum.repos.d when building the ISO.
 # Copy them over; dnf5 treats a same-named file in /etc as an override, so
-# this changes nothing for dnf itself
+# this changes nothing for dnf itself. Older bases (base-nvidia is still on
+# 44) have no /usr/share/dnf5/repos.d and already keep them in /etc
 for repo in /usr/share/dnf5/repos.d/*.repo; do
+  [ -e "$repo" ] || continue
   [ -e "/etc/yum.repos.d/${repo##*/}" ] || cp "$repo" /etc/yum.repos.d/
 done
 test -f /etc/yum.repos.d/fedora.repo
