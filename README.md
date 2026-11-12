@@ -8,7 +8,7 @@ A Fedora Atomic image for containerized development, built with [BlueBuild](http
 | `ghcr.io/whughesiii2187/darksaber-nvidia` | NVIDIA GTX 16xx / RTX and newer (open kernel modules, GPU access in containers) |
 
 - **Base:** `ghcr.io/ublue-os/base-main` / `base-nvidia` (Fedora Atomic + codecs/firmware, no desktop environment)
-- **Desktop:** Niri, Dux Shell, `dms-greeter` on greetd, Ghostty, [Dux Files](https://duxlabs.dev/docs/dfiles) (Nautilus is kept as a fallback)
+- **Desktop:** Niri, Dux Shell, `dms-greeter` on greetd, Ghostty, [Dux Files](https://duxlabs.dev/docs/dfiles)
 - **Apps:** Firefox, Zen, Tor Browser, LibreOffice, Papers, Bitwarden, Proton Pass, ProtonVPN, LocalSend, Zoom, Whatsie, Spotify, VLC, qBittorrent, Pinta, Bazaar, Flatseal, Gear Lever, Podman Desktop and a few GNOME utilities as Flatpaks (installed on first boot); VS Code; imv and mpv for images and video.
 - **CLI:** zsh (the default login shell), Neovim (with gcc and tree-sitter-cli for its parsers), tmux, stow, lazygit, fzf, ripgrep, bat, Clipboard (`cb`), Claude Code, the devcontainer CLI and the 0xProto Nerd Font.
 - **System:** ufw as the firewall, Homebrew for the first user.

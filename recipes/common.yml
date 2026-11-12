@@ -59,8 +59,6 @@ modules:
         - bubblewrap # sandboxes Dux Files' external thumbnailers
         - ffmpegthumbnailer # video thumbnails
         - poppler-utils # PDF thumbnails (pdftoppm)
-        - nautilus # kept as a fallback while Dux Files is new
-        - nautilus-python
         - file-roller
         - gnome-disk-utility
         - nm-connection-editor
